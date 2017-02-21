@@ -3,9 +3,15 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {
+    Component, Input, Output, EventEmitter, QueryList, ContentChildren, ElementRef,
+    AfterContentInit, OnDestroy
+} from "@angular/core";
+import {Subscription} from "rxjs/Subscription";
 import {Selection, SelectionType} from "./providers/selection";
 import {RowActionService} from "./providers/row-action-service";
+import {ColumnsWidth} from "./providers/columns-width";
+import {DatagridCell} from "./datagrid-cell";
 
 @Component({
     selector: "clr-dg-row",
@@ -26,8 +32,7 @@ import {RowActionService} from "./providers/row-action-service";
         "[class.datagrid-selected]": "selected"
     }
 })
-export class DatagridRow {
-
+export class DatagridRow implements AfterContentInit, OnDestroy {
     /* reference to the enum so that template can access */
     public SELECTION_TYPE = SelectionType;
 
@@ -36,8 +41,8 @@ export class DatagridRow {
      */
     @Input("clrDgItem") item: any;
 
-    constructor (public selection: Selection, public rowActionService: RowActionService) {
-    }
+    constructor(public selection: Selection, public rowActionService: RowActionService,
+                private columnsWidth: ColumnsWidth) {}
 
     private _selected = false;
     /**
@@ -66,5 +71,25 @@ export class DatagridRow {
             this.selected = selected;
             this.selectedChanged.emit(selected);
         }
+    }
+
+    /*
+     * Smart column sizing
+     */
+    @ContentChildren(DatagridCell, {read: ElementRef}) private cells: QueryList<ElementRef>;
+
+    ngAfterContentInit() {
+        this._columnsWidthSubscription = this.columnsWidth.resize.subscribe(() => {
+            this.columnsWidth.setWidths(this.cells.map(cell => cell.nativeElement));
+        });
+        this.columnsWidth.setWidths(this.cells.map(cell => cell.nativeElement));
+    }
+
+    /**
+     * Subscription to the page service changes
+     */
+    private _columnsWidthSubscription: Subscription;
+    ngOnDestroy() {
+        this._columnsWidthSubscription.unsubscribe();
     }
 }

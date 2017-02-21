@@ -13,36 +13,72 @@
     @include basic-table(".datagrid", ".datagrid-head", ".datagrid-body",
         ".datagrid-row", ".datagrid-column", ".datagrid-cell");
 
-    .datagrid {
-        display: table;
-        max-width: none; // override the basic-table's style of max-width: 100%
-    }
-    .datagrid-head {
-        display: table-header-group;
-    }
-    .datagrid-body {
-        display: table-row-group;
-    }
-    .datagrid-column {
-        display: table-cell;
-    }
-    .datagrid-row {
-        display: table-row;
-    }
-    .datagrid-cell {
-        display: table-cell;
-    }
-
     $clr-datagrid-icon-size: rem(1);
     $clr-datagrid-action-arrow-size: $clr_baselineRem_0_25;
 
-    .datagrid-content-wrapper {
-        display: block;
-        overflow: auto;
+    .datagrid-container {
+        display: flex;
+        width: 100%;
+        overflow-x: auto;
     }
 
-    .datagrid-wrapper {
+    .datagrid {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+    .datagrid-head, .datagrid-body, .datagrid-column, .datagrid-cell {
+        display: block;
+    }
+    .datagrid-table-wrapper {
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: column nowrap;
+    }
+    .datagrid-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+    .datagrid-head {
+        flex: 0 0 auto;
+    }
+    .datagrid-row {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+    .datagrid-column, .datagrid-cell {
+        flex: 1 1 auto;
+        width: 0;
+
+        &.datagrid-fixed-width {
+            flex: 0 0 auto;
+        }
+    }
+
+    // Class only applied temporarily when computing columns width
+    .datagrid-computing-columns-width {
+        display: table;
+
+        .datagrid-head {
+            display: table-header-group;
+        }
+        .datagrid-body {
+            display: table-row-group;
+        }
+        .datagrid-row {
+            display: table-row;
+        }
+        .datagrid-column, .datagrid-cell {
+            display: table-cell;
+        }
+    }
+
+    $clr-datagrid-icon-size: rem(1);
+
+    .datagrid {
         position: relative;
+        flex: 1;
+        width: initial; // override the basic table's style of width: 100%
+        max-width: none; // override the basic table's style of max-width: 100%
 
         .datagrid-spinner {
             position: absolute;
@@ -62,13 +98,8 @@
                 margin: auto;
             }
         }
-    }
 
-    .datagrid {
-        // Reset border-radius at the bottom to seamlessly join with the footer
-        border-bottom: 0 none;
-        border-radius: $clr-default-borderradius $clr-default-borderradius 0 0;
-        .datagrid-body:last-child {
+        .datagrid-body {
             .datagrid-row:last-child {
                 .datagrid-cell {
                     &:first-child {
@@ -206,7 +237,7 @@
         }
 
         .datagrid-select {
-            width: 2*$clr-table-cellpadding + $clr-table-lineheight;
+            flex: 0 0 2*$clr-table-cellpadding + $clr-table-lineheight;
 
             .checkbox label {
                 display: block;
@@ -336,10 +367,9 @@
     }
 
     .datagrid-placeholder {
+        flex: 1 1 auto;
         background: $clr-white;
         border-top: 1px solid $clr-lighter-midtone-gray;
-        border-left: $clr-table-borderstyle;
-        border-right: $clr-table-borderstyle;
         padding: $clr_baselineRem_0_5;
 
         &.datagrid-empty {
@@ -375,18 +405,17 @@
     }
 
     .datagrid-foot {
+        flex: 0 0 auto;
         display: flex;
         flex-flow: row nowrap;
         justify-content: flex-end;
         align-items: stretch;
-        width: 100%;
         height: $clr_baselineRem_1_5;
         padding: 0 $clr-table-cellpadding;
         // Account for borders
         line-height: $clr_baselineRem_1_5 - 3px;
         font-size: clr-getTypePropertyValueForDomElement(table_header, font-size);
         background-color: $clr-thead-bgcolor;
-        border: $clr-table-borderstyle;
         border-top: 2px solid $clr-light-midtone-gray;
         border-radius: 0 0 $clr-default-borderradius $clr-default-borderradius;
 
@@ -444,5 +473,13 @@
             // FIXME: this should be in the general reboot
             cursor: pointer;
         }
+    }
+
+    // Needed for the hack to test if a cell has a user-defined width
+    .datagrid-cell-width-zero {
+        border: 0 !important;
+        padding: 0 !important;
+        width: 0;
+        flex: 0 0 auto !important;
     }
 }
