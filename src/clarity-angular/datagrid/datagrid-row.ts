@@ -22,7 +22,7 @@ import {DatagridCell} from "./datagrid-cell";
         <clr-dg-cell *ngIf="selection.selectionType === SELECTION_TYPE.Single" class="datagrid-select">
             <input type="radio" [name]="selection.id + '-radio'" [value]="item" [(ngModel)]="selection.currentSingle">
         </clr-dg-cell>
-        <clr-dg-cell *ngIf="rowActionService.actionableCount > 0" class="datagrid-single-select">
+        <clr-dg-cell *ngIf="rowActionService.actionableCount > 0" class="datagrid-row-actions">
             <ng-content select="clr-dg-action-overflow"></ng-content>
         </clr-dg-cell>
         <ng-content></ng-content>

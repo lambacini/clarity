@@ -18,6 +18,7 @@
 
     .datagrid-container {
         display: flex;
+        flex-flow: row wrap;
         width: 100%;
         overflow-x: auto;
     }
@@ -253,7 +254,7 @@
         }
 
         .datagrid-row-actions {
-            width: $clr-table-cellpadding + $clr-table-lineheight;
+            flex: 0 0 2*$clr-table-cellpadding + $clr-table-lineheight;
             cursor: pointer;
         }
 
@@ -394,11 +395,11 @@
     }
 
     .datagrid-action-bar {
+        flex: 0 0 100%;
         padding: $clr_baselineRem_0_125;
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-        width: 100%;
         min-height: $clr_baselineRem_1_75;
         line-height: $clr_baselineRem_1_75 - 3px;
         margin-bottom: -$clr_baselineRem_1;
