@@ -19,6 +19,16 @@ export class ColumnsWidth {
 
     private domAdapter = new DomAdapter();
 
+    private head: any;
+    private body: any;
+    private tableWrapper: any;
+
+    public setNativeElements(head: any, body: any, tableWrapper: any) {
+        this.head = head;
+        this.body = body;
+        this.tableWrapper = tableWrapper;
+    }
+
     /**
      * Native elements for column headers
      */
@@ -53,10 +63,12 @@ export class ColumnsWidth {
 
     /**
      * Computes the width of all columns, preserving user-specified widths on the headers.
-     * Takes a native element wrapping both headers and rows, to briefly use table display as the
-     * fastest and browser-optimized way to compute reasonable columns width.
+     *
+     * @param tableWrapper: a native element wrapping both headers and rows, to briefly use table display as the
+     *                      fastest and browser-optimized way to compute reasonable columns width.
+     * @param body: the native element for the datagrid's body
      */
-    public setColumnsWidth(tableWrapper: any) {
+    public setColumnsWidth() {
         this.clearHeadersWidth();
         let newWidths: {px: number, strict: boolean}[] = [];
         // We first set strict widths on columns that have a user-defined width on the header.
@@ -69,16 +81,17 @@ export class ColumnsWidth {
         });
         // We very briefly use table layout to let the browser do the heavy work.
         // We then use the width the browser recommends as flex-basis for our columns.
-        this.renderer.setElementClass(tableWrapper, COMPUTE_WIDTH_CLASS, true);
+        this.renderer.setElementClass(this.tableWrapper, COMPUTE_WIDTH_CLASS, true);
         this.headers.forEach((header, index) => {
             if (!newWidths[index]) {
                 newWidths[index] = {px: this.domAdapter.scrollWidth(header), strict: false};
             }
         });
-        this.renderer.setElementClass(tableWrapper, COMPUTE_WIDTH_CLASS, false);
+        this.renderer.setElementClass(this.tableWrapper, COMPUTE_WIDTH_CLASS, false);
         this.widths = newWidths;
         this.headers.forEach(this.setHeaderWidth.bind(this));
         this._resize.next();
+        this.renderer.setElementStyle(this.head, "padding-right", this.domAdapter.getScrollBarWidth(this.body) + "px");
     }
 
     /**

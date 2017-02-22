@@ -20,6 +20,10 @@ export class DomAdapter {
         return userDefinedWidth;
     }
 
+    getScrollBarWidth(element: any) {
+        return element.offsetWidth - element.clientWidth;
+    }
+
     scrollWidth(element: any) {
         return element.scrollWidth || 0;
     }

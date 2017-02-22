@@ -7,7 +7,7 @@
 <ng-content select="clr-dg-action-bar"></ng-content>
 <div class="datagrid">
     <div #tableWrapper class="datagrid-table-wrapper">
-        <div class="datagrid-head">
+        <div #head class="datagrid-head">
             <div class="datagrid-row">
                 <!-- header for datagrid where you can select multiple rows -->
                 <div class="datagrid-column datagrid-select"
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="datagrid-body">
+        <div #body class="datagrid-body">
             <template *ngIf="iterator"
                       ngFor [ngForOf]="items.displayed" [ngForTrackBy]="iterator.trackBy"
                       [ngForTemplate]="iterator.template"></template>

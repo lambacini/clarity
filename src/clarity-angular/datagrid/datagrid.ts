@@ -225,6 +225,8 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
             }
         }));
 
+        this.columnsWidth.setNativeElements(this.head.nativeElement, this.body.nativeElement,
+            this.tableWrapper.nativeElement);
         this.stabilizeColumns();
     }
 
@@ -237,11 +239,15 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Ugly-ish pollution of the controller, we need the reference to an element that wraps
-     * the table part of the datagrid (header + rows) to correctly size the columns.
-     * As long as we don't play with native elements on handle sizing manually in this component,
+     * Ugly-ish pollution of the controller, we need the reference to several elements of the datagrid.
+     * - The header
+     * - The body
+     * - An element that wraps the table part of the datagrid (the previous two elements) to correctly size the columns.
+     * As long as we don't play with native elements or handle sizing manually in this component,
      * it should be fine.
      */
+    @ViewChild("head") private head: ElementRef;
+    @ViewChild("body") private body: ElementRef;
     @ViewChild("tableWrapper") private tableWrapper: ElementRef;
 
     /**
@@ -258,7 +264,7 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
         if (this.columnsSizesStable) { return; }
         // No point resizing if there are no rows, we wait until they are actually loaded.
         if (this.rows.length > 0) {
-            this.columnsWidth.setColumnsWidth(this.tableWrapper.nativeElement);
+            this.columnsWidth.setColumnsWidth();
             this.columnsSizesStable = true;
         }
     }

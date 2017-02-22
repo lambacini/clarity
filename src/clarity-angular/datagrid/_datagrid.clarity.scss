@@ -15,17 +15,25 @@
 
     $clr-datagrid-icon-size: rem(1);
     $clr-datagrid-action-arrow-size: $clr_baselineRem_0_25;
+    $clr-datagrid-select-column-size: 2*$clr-table-cellpadding + $clr-table-lineheight;
 
     .datagrid-container {
         display: flex;
-        flex-flow: row wrap;
+        flex-flow: column nowrap;
         width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
     }
 
     .datagrid {
         display: flex;
         flex-flow: column nowrap;
+        align-self: flex-start;
+        min-width: 100%;
+        // Firefox needs this
+        min-height: 0;
+        // IE10 (maybe later versions too) needs this
+        overflow: hidden;
     }
     .datagrid-head, .datagrid-body, .datagrid-column, .datagrid-cell {
         display: block;
@@ -34,6 +42,10 @@
         flex: 1 1 auto;
         display: flex;
         flex-flow: column nowrap;
+        // Firefox needs this
+        min-height: 0;
+        // IE10 (maybe later versions too) needs this
+        overflow: hidden;
     }
     .datagrid-body {
         flex: 1 1 auto;
@@ -77,8 +89,8 @@
 
     .datagrid {
         position: relative;
-        flex: 1;
-        width: initial; // override the basic table's style of width: 100%
+        flex: 1 1 auto;
+        width: auto; // override the basic table's style of width: 100%
         max-width: none; // override the basic table's style of max-width: 100%
 
         .datagrid-spinner {
@@ -113,14 +125,20 @@
             }
         }
 
+        .datagrid-head {
+            background-color: $clr-thead-bgcolor;
+            border-bottom: 2px solid $clr-light-midtone-gray;
+        }
+
         .datagrid-column, .datagrid-cell {
             text-align: left;
         }
 
         .datagrid-column {
             position: relative;
-            border-bottom: 2px solid $clr-light-midtone-gray;
             vertical-align: top;
+            background: none;
+            border-bottom: 0;
 
             // Separator between column headers
             &:not(:last-child)::before {
@@ -238,7 +256,9 @@
         }
 
         .datagrid-select {
-            flex: 0 0 2*$clr-table-cellpadding + $clr-table-lineheight;
+            flex: 0 0 $clr-datagrid-select-column-size;
+            // IE10 needs this
+            max-width: $clr-datagrid-select-column-size;
 
             .checkbox label {
                 display: block;
@@ -254,11 +274,12 @@
         }
 
         .datagrid-row-actions {
-            flex: 0 0 2*$clr-table-cellpadding + $clr-table-lineheight;
-            cursor: pointer;
+            flex: 0 0 $clr-datagrid-select-column-size;
+            // IE10 needs this
+            max-width: $clr-datagrid-select-column-size;
         }
 
-        .datagrid-row {
+        .datagrid-body .datagrid-row {
             &:hover {
                 background-color: $clr-light-gray;
             }
@@ -395,7 +416,7 @@
     }
 
     .datagrid-action-bar {
-        flex: 0 0 100%;
+        flex: 0 0 auto;
         padding: $clr_baselineRem_0_125;
         display: flex;
         flex-flow: row nowrap;
