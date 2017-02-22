@@ -388,8 +388,12 @@
         }
     }
 
+    .datagrid-placeholder-container {
+      display: block;
+      flex: 1 1 auto;
+    }
+
     .datagrid-placeholder {
-        flex: 1 1 auto;
         background: $clr-white;
         border-top: 1px solid $clr-lighter-midtone-gray;
         padding: $clr_baselineRem_0_5;
