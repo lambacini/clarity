@@ -290,9 +290,6 @@
 
             .datagrid-action-overflow {
                 position: absolute;
-                left: 100%;
-                transform: translateY(-50%);
-                margin-top: -1 * ($clr-datagrid-icon-size / 2);
                 background: $clr-white;
                 padding: $clr_baselineRem_0_25 $clr_baselineRem_0_25;
                 border: 1px solid $gray-light-midtone;
@@ -383,7 +380,6 @@
 
         .datagrid-cell {
             border-top-color: $clr-lighter-midtone-gray;
-            position: relative;
         }
     }
 
