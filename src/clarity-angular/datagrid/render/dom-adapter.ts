@@ -10,8 +10,10 @@
  * to native DOM elements' methods and properties in the Datagrid happens here.
  */
 
+import {Injectable} from "@angular/core";
+
+@Injectable()
 export class DomAdapter {
-    constructor() {}
 
     getUserDefinedWidth(element: any): number {
         element.classList.add("datagrid-cell-width-zero");

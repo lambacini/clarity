@@ -4,12 +4,12 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import {Injectable} from "@angular/core";
-import {ColumnsWidth} from "./columns-width";
+import {DatagridRenderOrganizer} from "../render/render-organizer";
 
 @Injectable()
 export class RowActionService {
 
-    constructor(private columnsWidth: ColumnsWidth) {}
+    constructor(private renderOrganizer: DatagridRenderOrganizer) {}
 
     /**
      * a value of 0 means no rows with action
@@ -37,8 +37,10 @@ export class RowActionService {
         if (!this.locked) {
             this.locked = true;
             fn();
-            // Scrollbar might have disappeared, we need to recompute the layout.
-            this.columnsWidth.setColumnsWidth();
+            // Scrollbar might have disappeared, we need to warn the renderers
+            // TODO: A webkit bug prevents us from simply refreshing the scrollbar. Weird. Needs investigation.
+            // this.renderOrganizer.scrollbar.next();
+            this.renderOrganizer.resize();
         } else {
             this.waiting = fn;
         }
@@ -50,8 +52,10 @@ export class RowActionService {
             delete this.waiting;
         } else {
             this.locked = false;
-            // Scrollbar might have appeared, we need to recompute the layout.
-            this.columnsWidth.setColumnsWidth();
+            // Scrollbar might have appeared, we need to warn the renderers
+            // TODO: A webkit bug prevents us from simply refreshing the scrollbar. Weird. Needs investigation.
+            // this.renderOrganizer.scrollbar.next();
+            this.renderOrganizer.resize();
         }
     }
 }

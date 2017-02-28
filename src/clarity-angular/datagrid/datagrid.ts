@@ -5,14 +5,13 @@
  */
 import {
     AfterViewInit, OnDestroy, Component, ContentChild, ContentChildren, EventEmitter,
-    Input, Output, QueryList, AfterContentInit, ViewChild, ElementRef
+    Input, Output, QueryList, AfterContentInit
 } from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 
 import {DatagridPropertyComparator} from "./built-in/comparators/datagrid-property-comparator";
 import {DatagridPropertyStringFilter} from "./built-in/filters/datagrid-property-string-filter";
 import {DatagridStringFilter} from "./built-in/filters/datagrid-string-filter";
-import {DatagridColumn} from "./datagrid-column";
 import {DatagridItems} from "./datagrid-items";
 import {DatagridRow} from "./datagrid-row";
 import {DatagridPlaceholder} from "./datagrid-placeholder";
@@ -23,12 +22,12 @@ import {Page} from "./providers/page";
 import {Selection, SelectionType} from "./providers/selection";
 import {Sort} from "./providers/sort";
 import {RowActionService} from "./providers/row-action-service";
-import {ColumnsWidth} from "./providers/columns-width";
+import {DatagridRenderOrganizer} from "./render/render-organizer";
 
 @Component({
     selector: "clr-datagrid",
     templateUrl: "./datagrid.html",
-    providers: [Selection, Sort, FiltersProvider, Page, RowActionService, Items, ColumnsWidth],
+    providers: [Selection, Sort, FiltersProvider, Page, RowActionService, Items, DatagridRenderOrganizer],
     host: {
         "[class.datagrid-container]": "true"
     }
@@ -36,8 +35,7 @@ import {ColumnsWidth} from "./providers/columns-width";
 export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
 
     constructor(public selection: Selection, private sort: Sort, private filters: FiltersProvider,
-                private page: Page, public rowActionService: RowActionService, public items: Items,
-                private columnsWidth: ColumnsWidth) {}
+                private page: Page, public rowActionService: RowActionService, public items: Items) {}
 
     /* reference to the enum so that template can access */
     public SELECTION_TYPE = SelectionType;
@@ -180,32 +178,17 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
      */
     @ContentChildren(DatagridRow) private rows: QueryList<DatagridRow>;
 
-    /**
-     * We get a reference to the column headers to size them intelligently.
-     */
-    @ContentChildren(DatagridColumn, {read: ElementRef}) private headers: QueryList<ElementRef>;
-
     ngAfterContentInit() {
         // TODO: Move all this to ngOnInit() once https://github.com/angular/angular/issues/12818 goes in.
         // And when we do that, remove the manual step for each one.
-
         this._subscriptions.push(this.rows.changes.subscribe(() => {
             if (!this.items.smart) {
                 this.items.all = this.rows.map((row: DatagridRow) => row.item);
             }
-            this.stabilizeColumns();
         }));
         if (!this.items.smart) {
             this.items.all = this.rows.map((row: DatagridRow) => row.item);
         }
-
-        this._subscriptions.push(this.headers.changes.subscribe(() => {
-            this.columnsSizesStable = false;
-            this.columnsWidth.headers = this.headers.map(header => header.nativeElement);
-            // TODO: only re-stabilize if a column was added or removed. Reordering is fine.
-            this.stabilizeColumns();
-        }));
-        this.columnsWidth.headers = this.headers.map(header => header.nativeElement);
     }
 
     /**
@@ -224,10 +207,6 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
                 this.selectedChanged.emit(s);
             }
         }));
-
-        this.columnsWidth.setNativeElements(this.head.nativeElement, this.body.nativeElement,
-            this.tableWrapper.nativeElement);
-        this.stabilizeColumns();
     }
 
     /**
@@ -237,36 +216,4 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
     ngOnDestroy() {
         this._subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
     }
-
-    /**
-     * Ugly-ish pollution of the controller, we need the reference to several elements of the datagrid.
-     * - The header
-     * - The body
-     * - An element that wraps the table part of the datagrid (the previous two elements) to correctly size the columns.
-     * As long as we don't play with native elements or handle sizing manually in this component,
-     * it should be fine.
-     */
-    @ViewChild("head") private head: ElementRef;
-    @ViewChild("body") private body: ElementRef;
-    @ViewChild("tableWrapper") private tableWrapper: ElementRef;
-
-    /**
-     * Indicates if we want to re-compute columns width. This should only happen:
-     * 1) When headers change, with columns being added or removed
-     * 2) When rows are lazily loaded for the first time
-     */
-    private columnsSizesStable = false;
-
-    /**
-     * Re-computes columns width if needed.
-     */
-    private stabilizeColumns() {
-        if (this.columnsSizesStable) { return; }
-        // No point resizing if there are no rows, we wait until they are actually loaded.
-        if (this.rows.length > 0) {
-            this.columnsWidth.setColumnsWidth();
-            this.columnsSizesStable = true;
-        }
-    }
-
 }
