@@ -27,7 +27,7 @@ export class DatagridActionOverflow implements OnDestroy, AfterViewInit {
 
     private position: Popover;
 
-    @ViewChildren("menu") private menu: QueryList<ElementRef>;
+    @ViewChildren("menu") menu: QueryList<ElementRef>;
 
     ngAfterViewInit() {
         this._menuSubscription = this.menu.changes.subscribe(() => {

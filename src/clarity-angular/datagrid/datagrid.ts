@@ -176,7 +176,7 @@ export class Datagrid implements AfterContentInit, AfterViewInit, OnDestroy {
      * by querying the projected content. This is needed to keep track of the models currently
      * displayed, typically for selection.
      */
-    @ContentChildren(DatagridRow) private rows: QueryList<DatagridRow>;
+    @ContentChildren(DatagridRow) rows: QueryList<DatagridRow>;
 
     ngAfterContentInit() {
         // TODO: Move all this to ngOnInit() once https://github.com/angular/angular/issues/12818 goes in.
