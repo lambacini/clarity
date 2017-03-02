@@ -15,14 +15,14 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class DomAdapter {
 
-    getUserDefinedWidth(element: any): number {
+    userDefinedWidth(element: any): number {
         element.classList.add("datagrid-cell-width-zero");
         let userDefinedWidth = parseInt(getComputedStyle(element).getPropertyValue("width"), 10);
         element.classList.remove("datagrid-cell-width-zero");
         return userDefinedWidth;
     }
 
-    getScrollBarWidth(element: any) {
+    scrollBarWidth(element: any) {
         return element.offsetWidth - element.clientWidth;
     }
 

@@ -23,6 +23,7 @@ export class DatagridCellRenderer implements OnDestroy {
     }
 
     private clearWidth() {
+        this.renderer.setElementClass(this.el.nativeElement, STRICT_WIDTH_CLASS, false);
         this.renderer.setElementStyle(this.el.nativeElement, "width", null);
     }
 

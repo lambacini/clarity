@@ -32,12 +32,13 @@ export class DatagridHeaderRenderer implements OnDestroy {
     private widthSet = false;
 
     private clearWidth() {
+        this.renderer.setElementClass(this.el.nativeElement, STRICT_WIDTH_CLASS, false);
         // We only clear if we set the width ourselves, otherwise we risk clearing consumer styles.
         if (this.widthSet) {
             this.renderer.setElementStyle(this.el.nativeElement, "width", null);
             this.widthSet = false;
         }
-        let strictWidth = this.domAdapter.getUserDefinedWidth(this.el.nativeElement);
+        let strictWidth = this.domAdapter.userDefinedWidth(this.el.nativeElement);
         if (strictWidth) {
             this.strictWidth = strictWidth;
         } else {

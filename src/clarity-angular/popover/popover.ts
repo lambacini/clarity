@@ -88,7 +88,7 @@ export class Popover {
 
     private preventScrolling(e: any) {
         let current: any = e;
-        while (current) {
+        while (current && current !== document) {
             if (this.scrolls(current)) {
                 this.originalOverflows.push({
                     e: current,

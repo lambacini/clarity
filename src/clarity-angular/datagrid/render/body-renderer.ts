@@ -23,6 +23,6 @@ export class DatagridBodyRenderer implements OnDestroy {
     }
 
     private computeScrollbarWidth() {
-        this.organizer.scrollbarWidth.next(this.domAdapter.getScrollBarWidth(this.el.nativeElement));
+        this.organizer.scrollbarWidth.next(this.domAdapter.scrollBarWidth(this.el.nativeElement));
     }
 }

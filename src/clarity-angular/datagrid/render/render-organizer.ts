@@ -13,22 +13,22 @@ export class DatagridRenderOrganizer {
 
     public widths: {px: number, strict: boolean}[] = [];
 
-    private _clearWidths = new Subject<any>();
+    protected _clearWidths = new Subject<any>();
     public get clearWidths(): Observable<any> {
         return this._clearWidths.asObservable();
     }
 
-    private _tableMode = new Subject<boolean>();
+    protected _tableMode = new Subject<boolean>();
     public get tableMode(): Observable<boolean> {
         return this._tableMode.asObservable();
     }
 
-    private _computeWidths = new Subject<any>();
+    protected _computeWidths = new Subject<any>();
     public get computeWidths(): Observable<any> {
         return this._computeWidths.asObservable();
     }
 
-    private _alignColumns = new Subject<any>();
+    protected _alignColumns = new Subject<any>();
     public get alignColumns(): Observable<any> {
         return this._alignColumns.asObservable();
     }

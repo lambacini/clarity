@@ -35,36 +35,36 @@ export default function(): void {
         });
 
         it("computes the width of the scrollbar on an element", function(this: UserContext) {
-            expect(this.domAdapter.getScrollBarWidth(this.element)).toBe(0);
+            expect(this.domAdapter.scrollBarWidth(this.element)).toBe(0);
             this.element.style.overflow = "scroll";
             // This will actually fail on "good" OSX browsers, even though the behavior is correct.
             // So it runs only on PhantomJs at the moment.
             if (/PhantomJS/.test(window.navigator.userAgent)) {
-                expect(this.domAdapter.getScrollBarWidth(this.element)).toBeGreaterThan(0);
+                expect(this.domAdapter.scrollBarWidth(this.element)).toBeGreaterThan(0);
             }
         });
 
         describe("user-defined width", function() {
             it("recognizes a width defined on the element", function(this: UserContext) {
-                expect(this.domAdapter.getUserDefinedWidth(this.element)).toBe(0);
+                expect(this.domAdapter.userDefinedWidth(this.element)).toBe(0);
                 this.element.style.width = "42px";
-                expect(this.domAdapter.getUserDefinedWidth(this.element)).toBe(42);
+                expect(this.domAdapter.userDefinedWidth(this.element)).toBe(42);
             });
 
             it("recognizes a width defined in a CSS stylesheet", function(this: UserContext) {
-                expect(this.domAdapter.getUserDefinedWidth(this.element)).toBe(0);
+                expect(this.domAdapter.userDefinedWidth(this.element)).toBe(0);
                 let style = document.createElement("style");
                 style.appendChild(document.createTextNode(".my-test { width: 42px; }"));
                 document.body.appendChild(style);
                 this.element.classList.add("my-test");
-                expect(this.domAdapter.getUserDefinedWidth(this.element)).toBe(42);
+                expect(this.domAdapter.userDefinedWidth(this.element)).toBe(42);
                 document.body.removeChild(style);
             });
 
             it("ignores padding and border", function(this: UserContext) {
                 this.element.style.padding = "10px";
                 this.element.style.border = "5px solid black";
-                expect(this.domAdapter.getUserDefinedWidth(this.element)).toBe(0);
+                expect(this.domAdapter.userDefinedWidth(this.element)).toBe(0);
             });
         });
 
