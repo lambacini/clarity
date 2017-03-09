@@ -17,11 +17,14 @@ import {DatagridFilteringDemo} from "./filtering/filtering";
 import {DatagridFullDemo} from "./full/full";
 import {DatagridPaginationDemo} from "./pagination/pagination";
 import {DatagridSelectionDemo} from "./selection/selection";
+import {DatagridSelectionSingleDemo} from "./selection-single/selection-single";
 import {DatagridServerDrivenDemo} from "./server-driven/server-driven";
 import {DatagridSmartIteratorDemo} from "./smart-iterator/smart-iterator";
 import {DatagridSortingDemo} from "./sorting/sorting";
 import {DatagridStringFilteringDemo} from "./string-filtering/string-filtering";
 import {DatagridPlaceholderDemo} from "./placeholder/placeholder";
+import {DatagridScrollingDemo} from "./scrolling/scrolling";
+import {DatagridColumnSizingDemo} from "./column-sizing/column-sizing";
 
 import {ColorFilter} from "./utils/color-filter";
 import {Example} from "./utils/example";
@@ -43,11 +46,14 @@ import {Example} from "./utils/example";
         DatagridFullDemo,
         DatagridPaginationDemo,
         DatagridSelectionDemo,
+        DatagridSelectionSingleDemo,
         DatagridServerDrivenDemo,
         DatagridSmartIteratorDemo,
         DatagridSortingDemo,
         DatagridStringFilteringDemo,
         DatagridPlaceholderDemo,
+        DatagridScrollingDemo,
+        DatagridColumnSizingDemo,
         ColorFilter,
         Example
     ],
@@ -60,12 +66,15 @@ import {Example} from "./utils/example";
         DatagridFullDemo,
         DatagridPaginationDemo,
         DatagridSelectionDemo,
+        DatagridSelectionSingleDemo,
         DatagridServerDrivenDemo,
         DatagridSmartIteratorDemo,
         DatagridSortingDemo,
         DatagridStringFilteringDemo,
-        DatagridPlaceholderDemo
+        DatagridPlaceholderDemo,
+        DatagridScrollingDemo,
+        DatagridColumnSizingDemo
     ]
 })
-export default class ModalDemoModule {
+export default class DatagridDemoModule {
 }

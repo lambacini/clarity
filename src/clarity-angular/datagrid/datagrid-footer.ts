@@ -14,5 +14,4 @@ import {Component} from "@angular/core";
         "[class.datagrid-foot]": "true",
     }
 })
-export class DatagridFooter {
-}
+export class DatagridFooter { }

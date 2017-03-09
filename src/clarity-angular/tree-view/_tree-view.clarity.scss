@@ -1,7 +1,11 @@
+// Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+// This software is released under MIT license.
+// The full license information can be found in LICENSE in the root directory of this project.
+
 @import "../utils/variables.clarity";
 @import "../utils/mixins.clarity";
 @import "../utils/helpers.clarity";
-@import "../forms/forms.clarity";
+@import "../forms/checkbox.clarity";
 
 $clr-tree-caret-size: 16px;
 $clr-tree-spinner-size: 16px;

@@ -22,10 +22,17 @@ export class DatagridStringFilteringDemo {
     users: User[];
 
     pokemonFilter = new PokemonFilter();
+    myFilterValue1 = "A";
+    myFilterValue2 = "E";
+    displayFilter = true;
 
     constructor(private inventory: Inventory) {
         inventory.size = 10;
         inventory.reset();
         this.users = inventory.all;
+    }
+
+    filterToggle() {
+        this.displayFilter = !this.displayFilter;
     }
 }

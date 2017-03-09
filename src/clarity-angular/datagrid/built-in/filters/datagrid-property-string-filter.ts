@@ -24,5 +24,4 @@ export class DatagridPropertyStringFilter implements StringFilter<any> {
             return ("" + propValue).toLowerCase().indexOf(search) >= 0;
         }
     }
-
 }

@@ -4,16 +4,19 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {Selection} from "./providers/selection";
+import {Selection, SelectionType} from "./providers/selection";
 import {RowActionService} from "./providers/row-action-service";
 
 @Component({
     selector: "clr-dg-row",
     template: `
-        <clr-dg-cell *ngIf="selection.selectable" class="datagrid-select">
+        <clr-dg-cell *ngIf="selection.selectionType === SELECTION_TYPE.Multi" class="datagrid-select">
             <clr-checkbox [ngModel]="selected" (ngModelChange)="toggle($event)"></clr-checkbox>
         </clr-dg-cell>
-        <clr-dg-cell *ngIf="rowActionService.actionableCount > 0" class="datagrid-single-select">
+        <clr-dg-cell *ngIf="selection.selectionType === SELECTION_TYPE.Single" class="datagrid-select">
+            <input type="radio" [name]="selection.id + '-radio'" [value]="item" [(ngModel)]="selection.currentSingle">
+        </clr-dg-cell>
+        <clr-dg-cell *ngIf="rowActionService.actionableCount > 0" class="datagrid-row-actions">
             <ng-content select="clr-dg-action-overflow"></ng-content>
         </clr-dg-cell>
         <ng-content></ng-content>
@@ -23,7 +26,10 @@ import {RowActionService} from "./providers/row-action-service";
         "[class.datagrid-selected]": "selected"
     }
 })
+
 export class DatagridRow {
+    /* reference to the enum so that template can access */
+    public SELECTION_TYPE = SelectionType;
 
     /**
      * Model of the row, to use for selection
@@ -37,18 +43,18 @@ export class DatagridRow {
      * Indicates if the row is selected
      */
     public get selected() {
-        if (this.selection.selectable) {
-            return this.selection.isSelected(this.item);
-        } else {
+        if (this.selection.selectionType === SelectionType.None) {
             return this._selected;
+        } else {
+            return this.selection.isSelected(this.item);
         }
     }
     @Input("clrDgSelected")
     public set selected(value: boolean) {
-        if (this.selection.selectable) {
-            this.selection.setSelected(this.item, value);
-        } else {
+        if (this.selection.selectionType === SelectionType.None) {
             this._selected = value;
+        } else {
+            this.selection.setSelected(this.item, value);
         }
     }
 
